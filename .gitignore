@@ -7,3 +7,5 @@ train_data/.DS_Store
 train_data/anger/.DS_Store
 train_data/disgust/.DS_Store
 train_data/happy/.DS_Store
+train_data
+draft
