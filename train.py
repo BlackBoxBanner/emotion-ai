@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
+from tqdm import tqdm
 from utils import SimpleCNN
 
 
@@ -28,13 +29,15 @@ def train_model(train_data_dir, model_save_path):
     model.train()
     for epoch in range(15):  # Number of epochs
         running_loss = 0.0
-        for inputs, labels in train_loader:
+        progress_bar = tqdm(train_loader, desc=f'Epoch {epoch + 1}', leave=False)
+        for inputs, labels in progress_bar:
             optimizer.zero_grad()
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             loss.backward()
             optimizer.step()
             running_loss += loss.item()
+            progress_bar.set_postfix(loss=running_loss / (len(train_loader.dataset) / train_loader.batch_size))
 
         print(f'Epoch {epoch + 1}, Loss: {running_loss / len(train_loader)}')
 

@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
+import os
 
 class SimpleCNN(nn.Module):
     def __init__(self, num_classes):
@@ -32,3 +32,20 @@ def get_num_classes_from_model(model_path):
     num_classes = checkpoint['fc2.weight'].size(0)
 
     return num_classes
+
+def get_image_paths(folder):
+    from PIL import Image
+
+    # Get all file paths in the folder
+    image_paths = []
+    for file in os.listdir(folder):
+        file_path = os.path.join(folder, file)
+        try:
+            # Open the file and verify it's an image
+            with Image.open(file_path) as img:
+                img.verify()  # Verify the file is an image
+                image_paths.append(file_path)
+        except (IOError, SyntaxError) as e:
+            # Ignore if the file is not a valid image
+            continue
+    return image_paths
